@@ -8,7 +8,6 @@ import {
   ArrayNotEmpty,
   IsOptional,
   Min,
-  isPositive,
   ValidateIf,
 } from 'class-validator';
 import { PartialType, ApiProperty } from '@nestjs/swagger';

@@ -1,7 +1,7 @@
-import { Module, HttpModule, HttpService } from '@nestjs/common';
+// app.module.ts
+import { Module, HttpModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
-import { Client } from 'pg';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -9,21 +9,8 @@ import { UsersModule } from './users/users.module';
 import { ProductsModule } from './products/products.module';
 import { DatabaseModule } from './database/database.module';
 import { enviroments } from './enviroments';
+import { AuthModule } from './auth/auth.module';
 import config from './config';
-
-const client = new Client({
-  user: 'root',
-  host: 'localhost',
-  database: 'my_db',
-  password: '123456',
-  port: 5432,
-});
-
-client.connect();
-client.query('SELECT * FROM tasks', (err, res) => {
-  console.error(err);
-  console.log(res.rows);
-});
 
 @Module({
   imports: [
@@ -40,26 +27,16 @@ client.query('SELECT * FROM tasks', (err, res) => {
         POSTGRES_PASSWORD: Joi.string().required(),
         POSTGRES_PORT: Joi.number().required(),
         POSTGRES_HOST: Joi.string().required(),
+        JWT_SECRET: Joi.string().required(),
       }),
     }),
     HttpModule,
     UsersModule,
     ProductsModule,
     DatabaseModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    {
-      provide: 'TASKS',
-      useFactory: async (http: HttpService) => {
-        const tasks = await http
-          .get('https://jsonplaceholder.typicode.com/todos')
-          .toPromise();
-        return tasks.data;
-      },
-      inject: [HttpService],
-    },
-  ],
+  providers: [AppService],
 })
 export class AppModule {}

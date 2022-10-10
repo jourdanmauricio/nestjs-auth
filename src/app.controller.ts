@@ -1,6 +1,11 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
-import { AppService } from './app.service';
+// app.controller.ts
+import { Controller, Get, UseGuards } from '@nestjs/common';
+import { ApiKeyGuard } from './auth/guards/api-key.guard';
 
+import { AppService } from './app.service';
+import { Public } from './auth/decorators/public.decorator';
+
+@UseGuards(ApiKeyGuard)
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
@@ -11,6 +16,7 @@ export class AppController {
   }
 
   @Get('nuevo')
+  @Public()
   newEndpoint() {
     return 'yo soy nuevo';
   }
@@ -18,9 +24,5 @@ export class AppController {
   @Get('/ruta/')
   hello() {
     return 'con /sas/';
-  }
-  @Get('tasks')
-  tasks() {
-    return this.appService.getTasks();
   }
 }

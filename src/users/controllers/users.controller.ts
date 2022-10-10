@@ -16,11 +16,6 @@ import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  // @Get('tasks')
-  // getTasks() {
-  //   return this.usersService.getTasks();
-  // }
-
   @Get()
   findAll() {
     return this.usersService.findAll();

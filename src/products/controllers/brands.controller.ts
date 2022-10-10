@@ -1,3 +1,4 @@
+// brands.controller.ts
 import {
   Controller,
   Get,
@@ -7,12 +8,15 @@ import {
   Put,
   Delete,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
 
 import { BrandsService } from '../services/brands.service';
 import { CreateBrandDto, UpdateBrandDto } from '../dtos/brand.dtos';
 
+@UseGuards(AuthGuard('jwt'))
 @ApiTags('brands')
 @Controller('brands')
 export class BrandsController {

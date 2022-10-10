@@ -66,10 +66,12 @@ export class ProductsService {
     /* El método ceate crea un instancia con la info pero no lo guarda en la BD */
     const newProduct = this.productRepo.create(data);
     try {
+      console.log('data.brandId', data.brandId);
       if (data.brandId) {
         const brand = await this.brandRepo.findOneBy({ id: data.brandId });
         newProduct.brand = brand;
       }
+      console.log('newProduct.brand', newProduct.brand);
       // Aqui resolvemos la categoria
       if (data.categoriesIds) {
         const categories = await this.categoryRepo.findBy({
